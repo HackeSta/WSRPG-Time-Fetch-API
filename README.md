@@ -18,6 +18,7 @@ using WSTimeFetch;
 
 string gameTime = TimeFetch.getHour().ToString() + ":" + TimeFetch.getMinute().ToString();
 ```
+*Timer based usage can be found in WSTimeFetch-Test*
 
 ## Notes
 * **The time doesn't tick on its own, it just gets the value from memory**
