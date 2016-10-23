@@ -15,22 +15,31 @@ namespace WSTimeFetch
         private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
         private static Process process;
+        private static Process[] _process;
         private static IntPtr processHandle;
         
-        private static bool Init()
+        private static bool Init() 
         {
             try
             {
-                process = Process.GetProcessesByName("gta_sa")[0];
-                processHandle = OpenProcess(PROCESS_WM_READ, false, process.Id);
-                return true;
+                _process = Process.GetProcessesByName("gta_sa");
+                if (_process.Length == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    process = _process[0];
+                    processHandle = OpenProcess(PROCESS_WM_READ, false, process.Id);
+                    return true;
+                }
             }
             catch
             {
                 return false;
             }
         }
-        public static int getHour()
+        public static int getHour() //Returns the in-game hour
         {
             if (Init())
             {
@@ -47,13 +56,10 @@ namespace WSTimeFetch
             }
         }
 
-        public static int getMinute()
+        public static int getMinute() //Returns the in-game minute
         {
             if (Init())
             {
-                process = Process.GetProcessesByName("gta_sa")[0];
-                processHandle = OpenProcess(PROCESS_WM_READ, false, process.Id);
-
                 int bytesReadMinutes = 0;
                 byte[] bufferMinutes = new byte[1];
 
@@ -66,6 +72,8 @@ namespace WSTimeFetch
                 return 0;
             }
         }
+
+        
 
     }
 }
